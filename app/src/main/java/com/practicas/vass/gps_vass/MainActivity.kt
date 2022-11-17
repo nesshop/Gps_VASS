@@ -18,11 +18,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
+import com.practicas.vass.gps_vass.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClickListener, OnMyLocationClickListener {
 
 
     private lateinit var map: GoogleMap
+    private lateinit var binding:ActivityMainBinding
+    private val coordinates = LatLng(37.0251, -3.6230)
 
     companion object {
         const val REQUEST_CODE_LOCATION = 0
@@ -30,7 +33,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+
+
+        binding.startRoute.setOnClickListener {
+            if (::map.isInitialized){
+
+
+            }
+        }
+
         createFragment()
     }
 
@@ -140,6 +154,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButton
     }
     override fun onMyLocationButtonClick(): Boolean {
         Toast.makeText(this,"Botón pulsado", Toast.LENGTH_SHORT).show()
+        map.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(coordinates, 20f),
+            4000,
+            null
+        )
         return false
     }
 
