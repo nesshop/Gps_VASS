@@ -1,39 +1,50 @@
-package com.practicas.vass.gps_vass
+package com.practicas.vass.gps_vass.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener
 import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.practicas.vass.gps_vass.R
 import com.practicas.vass.gps_vass.databinding.ActivityMainBinding
+import com.practicas.vass.gps_vass.utils.Locations
+import com.practicas.vass.gps_vass.utils.MapUtils
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClickListener,
     OnMyLocationClickListener {
 
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMainBinding
+    private var locations = mutableListOf<LatLng>()
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    //MVVM
+    private lateinit var mainActivityViewModel: MainViewModel
 
     companion object {
         const val REQUEST_CODE_LOCATION = 0
     }
-
-    private var locations = mutableListOf<LatLng>()
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
 
     private var locationCallback = object :LocationCallback(){
         override fun onLocationResult(result: LocationResult) {
@@ -44,7 +55,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButton
                MapUtils.addPolyline(map,locations)
             }
         }
-
     }
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +62,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButton
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         createFragment()
+        setupViewModel()
+        setupObservers()
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         binding.btnStart.setOnClickListener {
 
@@ -83,9 +95,29 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButton
 
         }
 
-        binding.btnPhoto.setOnClickListener {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivity(intent)
+        binding.btnPhoto.setOnClickListener{
+            startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        }
+    }
+
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            result: ActivityResult ->
+        if(result.resultCode == Activity.RESULT_OK){
+            val intent = result.data
+            val imageBitmap = intent?.extras?.get("data") as Bitmap
+            val imageView = binding.imgPhoto
+            imageView.setImageBitmap(imageBitmap)
+
+            map.addMarker(MarkerOptions().position(Locations.padul).icon(BitmapDescriptorFactory.fromBitmap(imageBitmap)))
+        }
+    }
+
+    private fun setupViewModel() {
+        mainActivityViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+    }
+
+    private fun setupObservers() {
+        mainActivityViewModel.mainActivity.observe(this){
 
         }
     }
@@ -127,7 +159,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButton
             Toast.makeText(this, "Ve a ajustes y acepta los permisos", Toast.LENGTH_SHORT).show()
         } else {
             ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION
+            )
         }
 
     }

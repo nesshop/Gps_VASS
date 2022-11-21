@@ -1,8 +1,7 @@
-package com.practicas.vass.gps_vass
+package com.practicas.vass.gps_vass.utils
 
 import android.content.Context
 import android.graphics.Color
-import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
@@ -69,6 +68,5 @@ object MapUtils {
             null
         )
     }
-
 
 }
