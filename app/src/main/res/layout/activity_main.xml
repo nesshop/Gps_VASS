@@ -3,7 +3,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <fragment
         android:id="@+id/map"
@@ -12,26 +13,59 @@
         android:layout_height="match_parent"
         tools:layout="@layout/support_simple_spinner_dropdown_item" />
 
-    <TextView
-        android:id="@+id/tvLatitude"
-        android:layout_width="match_parent"
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggle_group"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Latitud actual"
-        android:textColor="@color/black"
-        android:padding="10dp"
-        android:textSize="20sp"/>
+        android:layout_marginBottom="16dp"
+        android:background="@color/black_transparent"
+        android:visibility="visible"
+        android:layout_gravity="bottom|center"
+        app:singleSelection="true">
 
-    <TextView
-        android:id="@+id/tvLongitude"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Longitud actual"
-        android:textColor="@color/black"
-        android:padding="10dp"
-        android:textSize="20sp"/>
+        <Button
+            android:id="@+id/btnStart"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:text="Empezar"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="@color/white" />
 
-    <Button
+        <Button
+            android:id="@+id/btnStop"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:text="Parar"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnErase"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:text="Borrar"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnPhoto"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:text="Foto"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="@color/white" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+   <!-- <Button
         android:id="@+id/startRoute"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +73,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Iniciar ruta" />
+        android:text="Iniciar ruta" />-->
 
 </FrameLayout>
 
