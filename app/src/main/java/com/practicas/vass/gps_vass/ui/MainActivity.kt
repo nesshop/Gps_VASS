@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButton
             val imageView = binding.imgPhoto
             imageView.setImageBitmap(imageBitmap)
 
-            map.addMarker(MarkerOptions().position(Locations.padul).icon(BitmapDescriptorFactory.fromBitmap(imageBitmap)))
+            //map.addMarker(MarkerOptions().position(Locations.padul).icon(BitmapDescriptorFactory.fromBitmap(imageBitmap)))
         }
     }
 
@@ -117,10 +117,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButton
     }
 
     private fun setupObservers() {
-        mainActivityViewModel.mainActivity.observe(this){
-
+        mainActivityViewModel.coordinates.observe(this){
+            map.clear()
         }
     }
+
 
     private fun createFragment() {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment

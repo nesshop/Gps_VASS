@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 
 class MainViewModel : ViewModel() {
 
-    private var _mainActivity: MutableLiveData<LatLng> = MutableLiveData()
-    var mainActivity: LiveData<LatLng> = _mainActivity
+    private var _coordinates: MutableLiveData<List<LatLng>> = MutableLiveData()
+    var coordinates: LiveData<List<LatLng>> = _coordinates
 
 }
